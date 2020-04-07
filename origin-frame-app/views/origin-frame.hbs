@@ -1,0 +1,83 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/penpal/dist/penpal.min.js"></script>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/1.2/auth0-spa-js.production.js"></script>
+</head>
+
+<script type="text/javascript">
+
+  function initAuth0() {
+    return window.createAuth0Client({
+      domain: '{{ AUTH0_DOMAIN }}',
+      client_id: '{{ AUTH0_CLIENT_ID }}',
+      audience: '{{ API_AUDIENCE }}',
+      scope: '{{ SCOPES }}'
+    });
+  }
+
+  function connectToParentFrame(auth0) {
+    if (!document.location.ancestorOrigins || !document.location.ancestorOrigins.length) {
+      throw new Error('Origin not available, this page needs to be opened in an iframe');
+    }
+
+    const origin = document.location.ancestorOrigins[0];
+    const allowedOrigins = [
+      'https://customer1.acme.com',
+      'https://customer2.acme.com',
+      'https://customer3.acme.com',
+      'https://customer4.acme.com',
+      'http://localhost:5000'
+    ];
+
+    if (allowedOrigins.indexOf(origin) === -1) {
+      throw new Error('Invalid origin: ' + origin);
+    }
+
+    return window.Penpal.connectToParent({
+      parentOrigin: origin,
+      timeout: 500,
+      debug: true,
+      methods: {
+        login() {
+          auth0.loginWithPopup();
+        },
+        logout() {
+          auth0.logout({
+            returnTo: window.location.href
+          });
+        },
+        getUser() {
+          return auth0.getUser();
+        },
+        getShows() {
+          return auth0.getTokenSilently()
+            .then(t => {
+              return window.axios.get('{{ API_BASE_URL }}/api/my/shows', {
+                headers: {
+                  Authorization: 'Bearer ' + t
+                }
+              });
+            })
+            .then(res => {
+              return res.data;
+            })
+            .catch(e => {
+              console.log(e);
+              throw e;
+            });
+        }
+      }
+    });
+  }
+
+  initAuth0()
+    .then(client => connectToParentFrame(client))
+    .catch(e => {
+      console.log(e);
+    });
+</script>
+
+</html>
