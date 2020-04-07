@@ -54,12 +54,18 @@ class Root extends React.Component {
   getShows = async (e) => {
     e.preventDefault();
 
-    const client = await getClient();
-    const result = await client.getShows();
+    try {
+      const client = await getClient();
+      const result = await client.getShows();
 
-    this.setState({
-      result: JSON.stringify(result, null, 2),
-    });
+      this.setState({
+        result: JSON.stringify(result, null, 2),
+      });
+    } catch (e) {
+      this.setState({
+        result: JSON.stringify(e, null, 2),
+      });
+    }
   };
 
   render() {

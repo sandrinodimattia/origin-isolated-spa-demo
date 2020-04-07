@@ -30,7 +30,6 @@ app.get('/frame', (req, res) => {
   });
 });
 
-// Listen.
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
   pino.logger.info(`Origin frame listening on http://localhost:${port}`)

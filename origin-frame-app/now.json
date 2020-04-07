@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@now/node-server"
+    }
+  ],
+  "env": {
+    "AUTH0_DOMAIN": "sandrino-dev.auth0.com",
+    "AUTH0_CLIENT_ID": "ABVNhYzTB0kRF6PLp8Kfuhn7KS0X0mcq",
+    "SCOPES": "read:shows",
+    "API_AUDIENCE": "https://api/tv-shows",
+    "API_BASE_URL": "http://localhost:8000"
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.js"
+    }
+  ]
+}

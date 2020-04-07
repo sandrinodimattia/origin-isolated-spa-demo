@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@now/node-server"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.js",
+      "methods": [
+        "GET"
+      ],
+      "headers": {
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Origin": "*"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.js",
+      "methods": [
+        "OPTIONS"
+      ],
+      "headers": {
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Origin": "*"
+      }
+    }
+  ],
+  "env": {
+    "AUTH0_DOMAIN": "sandrino-dev.auth0.com",
+    "AUTH0_API_IDENTIFIER": "https://api/tv-shows"
+  }
+}

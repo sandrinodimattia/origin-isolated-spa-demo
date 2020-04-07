@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "ORIGIN_FRAME": "https://origin-isolated-frame.herokuapp.com/frame"
+    }
+  }
+}
